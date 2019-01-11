@@ -2,17 +2,17 @@ import json
 from datetime import datetime
 from collections import deque, namedtuple, defaultdict
 
-
+# 把字串轉換成datetime object
 def datetimeConverter(datestring):
     return datetime.strptime(datestring, '%Y%m%d%H%M%S')
 
-
-def read_json(day=19):
+# 讀取幾月幾號的YouBike站資料,並將其轉換成有效率和方便存取的資料結構
+def read_json(day=19,_month=10):
     station_dict = defaultdict(deque)
     YouBike = namedtuple(
         'YouBike', 'TotalSpace BikeNum Time EmptySpace Delta')
     for i in range(day, day + 1):
-        with open(f'D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\json\\201810{i}.json', 'r') as f:
+        with open(f'2018{month}{i}.json', 'r') as f:
             file = json.load(f)
             for k, v in file.items():
                 for i in range(len(v)):
