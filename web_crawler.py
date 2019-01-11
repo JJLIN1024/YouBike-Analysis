@@ -4,6 +4,7 @@ import pickle
 import requests
 
 
+# 爬取該時段YouBike站點的資料
 def download_file(youbike_data=[]):
     json_data = []
     url = "http://data.taipei/youbike"
@@ -17,7 +18,7 @@ def download_file(youbike_data=[]):
     write_file(youbike_data)
     return
 
-
+# 將此時段的資料更新
 def write_file(youbike_data):
     file_location = "ubike.pkl"
     with open(file_location, "wb") as file:
@@ -27,7 +28,7 @@ def write_file(youbike_data):
         file = pickle.load(file)
         print(file)
 
-
+# 每五鐘抓一筆資料
 while True:
     print("start\n")
     download_file()
