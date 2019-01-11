@@ -2,24 +2,29 @@ import folium
 import json
 from folium.plugins import Draw
 
+# 更新屬於自己的API key(pk.後面的東西)
 mapbox = "https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWFyb24wMjIxIiwiYSI6ImNqcTBiNHJlZDBqODQ0Mm11aWpqejk4ZWgifQ.ZXaiQzs7b3iwntK9_Nv-0w"
 
-with open("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\json\\YouBike.json", "r") as f:
+# 讀取YouBike站點位置的資料
+with open("YouBike.json", "r") as f:
     data = (json.load(f))["features"]
 
-with open("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\json\\MRT.json", "r") as f:
+# 讀取MRT站點位置的資料
+with open("MRT.json", "r") as f:
     data1 = (json.load(f))["features"]
 
-
+# 創立map object
 myMap = folium.Map(location=[25.03, 121.55], zoom_start=12,
                    prefer_canvas=True, tiles=mapbox, attr="Mapbox attribution")
 
+# 創立隸屬於map object的子項目並將YouBike站點位置標在地圖上
 fg1 = folium.FeatureGroup(name="YouBike")
 for i in range(len(data)):
     place = data[i]["geometry"]["coordinates"]
     place = [place[1], place[0]]
     fg1.add_child(folium.Circle(location=place, radius=2, weight=4))
 
+# 創立隸屬於map object的子項目並將MRT站點位置標在地圖上
 fg2 = folium.FeatureGroup(name="MRT")
 for i in range(len(data1)):
     place = data1[i]["geometry"]["coordinates"]
@@ -46,10 +51,4 @@ myMap.add_child(fg2)
 folium.LayerControl().add_to(myMap)
 Draw(export=True).add_to(myMap)
 
-# myMap.save("C:\\Users\\Aaron\\Desktop\\TaipeiMap.html")
-myMap.save("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\TaipeiMap.html")
-
-
-# black: tiles="CartoDB dark_matter"
-# white: tiles="cartodbpositron"
-# tiles="https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWFyb24wMjIxIiwiYSI6ImNqcHBqdGJjZDAzb3AzeG16c3dwNXBydTUifQ.Hz7cZOihH12HwjrFxEDSsw",attr="Mapbox"
+myMap.save("TaipeiMap.html")
