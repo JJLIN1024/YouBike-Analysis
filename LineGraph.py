@@ -4,19 +4,20 @@ import csv
 from collections import defaultdict
 from folium.plugins import Draw
 
-
+# 將string轉為float
 def convert_float(array):
     return [[float(i[0]), float(i[1])] for i in array]
 
-
-with open("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\csv\\YouBikeStation.csv", "r") as file:
+# 讀取YouBike車站地點的csv檔案
+with open("YouBikeStation.csv", "r") as file:
     data = {}
     csv_reader = csv.reader(file)
     next(csv_reader)
     for i in csv_reader:
         data[i[0]] = [i[3], i[4]]
 
-with open("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\201505紀錄.csv", "r", encoding="ANSI") as file:
+# 讀取2015/05的YouBike行車路線資料
+with open("201505紀錄.csv", "r", encoding="ANSI") as file:
     csv_reader = csv.reader(file)
     info = defaultdict(int)
     next(csv_reader)
@@ -29,14 +30,17 @@ with open("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\
         else:
             info[trip] += 1
 
+# 建立map object
 myMap = folium.Map(location=[25.053, 121.575], zoom_start=12,
                    prefer_canvas=True, tiles="cartodbpositron")
 
+# 建立隸屬於myMap的附屬物件
 group1 = folium.FeatureGroup(name="5 <= nums <= 100")
 group2 = folium.FeatureGroup(name="101 <= nums <= 500")
 group3 = folium.FeatureGroup(name="501 <= nums <= 1000")
 group4 = folium.FeatureGroup(name="nums > 1000")
 
+# 根據YouBike行車路線來畫圖
 for k, v in info.items():
     Rent, Return = k.split(":")
 
@@ -63,4 +67,5 @@ myMap.add_child(group4)
 folium.LayerControl().add_to(myMap)
 Draw(export=True).add_to(myMap)
 
-myMap.save("D:\\大學課程\\大二上\\社會科學程式設計\\Youbike專題\\White LineGraph.html")
+# 輸出並存為html檔
+myMap.save("White LineGraph.html")
